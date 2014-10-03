@@ -10,21 +10,21 @@
 <link rel="icon" type="image/png" href="_images/favicon-16.png" sizes="16x16">
 <link rel="icon" type="image/png" href="_images/favicon-32.png" sizes="32x32">
 <link rel="stylesheet" href="_stylesheets.css">
-<script src="_scripts.js"></script>
 
 
 </head>
 <body>
 <header id="header">
 <div class="wrapper">
-<nav class="menu-bar">
+<nav id="header-menu-bar" class="menu-bar">
 <h1 class="logotype"><a href="." title="Haskell on Heroku">Haskell on Heroku</a></h1>
-<span id="header-button-wrapper" class="menu-button-wrapper"><span id="header-button" class="menu-button"><a href="" title="Menu">Menu</a></span></span>
+<span id="header-button-wrapper" class="button-wrapper"><span id="header-button" class="menu-button"><a href="" title="Menu">Menu</a></span></span>
 <ul id="header-menu" class="menu">
 <li><a href="about/">About</a></li> <li><a href="docs/">Docs</a></li> <li><a href="support/">Support</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
 </ul>
 <script>
 if (localStorage['header-menu-open']) {
+  document.getElementById('header-menu-bar').classList.add('open');
   document.getElementById('header-menu').classList.add('open');
   document.getElementById('header-button').classList.add('open');
 }
@@ -54,9 +54,9 @@ blockquote p {
 </main>
 <footer id="footer">
 <div class="wrapper">
-<nav class="menu-bar">
+<nav id="footer-menu-bar" class="menu-bar">
 <h1 class="logotype"><a href="." title="Haskell on Heroku">Haskell on Heroku</a></h1>
-<span id="footer-button-wrapper"><span id="footer-button" class="button"><a href="" class="click-to-top" title="Top">Top</a></span></span>
+<span id="footer-button-wrapper" class="button-wrapper"><span id="footer-button" class="button"><a href="" class="click-to-top" title="Top">Top</a></span></span>
 <ul id="footer-menu" class="menu open">
 <li><a href="about/">About</a></li> <li><a href="docs/">Docs</a></li> <li><a href="support/">Support</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
 </ul>
@@ -74,5 +74,6 @@ blockquote p {
 </div>
 </div>
 <![endif]-->
+<script async src="_scripts.js"></script>
 </body>
 </html>
