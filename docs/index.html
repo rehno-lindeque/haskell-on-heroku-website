@@ -39,9 +39,11 @@ if (localStorage['header-menu-open']) {
 <div class="wrapper">
 <section id="docs" class="level1">
 <h1>Docs</h1>
-<p>Lorem ipsum dolor sit amet, oratio patrioque prodesset cu cum. Usu an cibo cetero suavitate, ne verear senserit pro, et mutat maiestatis vel. Eu denique accumsan democritum ius. Nec ex nusquam intellegam, pro te tation quaeque sensibus. Nibh vocent audire per ne. Nulla nostrum fabellas qui eu, ex oblique facilisi recteque usu.</p>
-<p>Te pro stet quodsi comprehensam. Cum inermis maiorum accusam no. Eu eos sale dicit, cu reque fabellas nec, vix at ubique imperdiet. Possim eligendi id quo, argumentum complectitur no qui. Eam ad tritani pertinacia, ex vitae suscipit eos. Pro reque oporteat cu, omnis summo no quo.</p>
-<p>Elitr inimicus ad vis. Vim no vero harum concludaturque, at qui facilis corpora dissentiunt, diam veri duo ad. Sed erat mutat atomorum ea, et nam albucius platonem moderatius. Usu ubique deserunt conclusionemque id, alii appetere mea id, wisi tamquam usu ex.</p>
+<p>Work in progress.</p>
+<hr />
+<p>Haskell on Heroku is intended to be used with a private Amazon S3 bucket, defined by the <code>HALCYON_S3_BUCKET</code> configuration variable.</p>
+<p>The S3 bucket is required for packages prebuilt on one-off dynos to be available during slug compilation, as there is no way to write to the Heroku cache from an one-off dyno. Additionally, multiple apps can share prebuilt packages by using the same S3 bucket.</p>
+<p>If write access to an S3 bucket is not available, no new packages can be prebuilt. This means any app requiring a package which is not on the <a href="http://TODO">list of public Halcyon prebuilt packages</a> will fail to compile.</p>
 </section>
 </div>
 </main>
