@@ -40,10 +40,22 @@ if (localStorage['header-menu-open']) {
 <section id="docs" class="level1">
 <h1>Docs</h1>
 <p>Work in progress.</p>
-<hr />
+<section id="on-buckets" class="level2">
+<h2>On buckets</h2>
 <p>Haskell on Heroku is intended to be used with a private Amazon S3 bucket, defined by the <code>HALCYON_S3_BUCKET</code> configuration variable.</p>
-<p>The S3 bucket is required for packages prebuilt on one-off dynos to be available during slug compilation, as there is no way to write to the Heroku cache from an one-off dyno. Additionally, multiple apps can share prebuilt packages by using the same S3 bucket.</p>
-<p>If write access to an S3 bucket is not available, no new packages can be prebuilt. This means any app requiring a package which is not on the <a href="http://TODO">list of public Halcyon prebuilt packages</a> will fail to compile.</p>
+<p>The bucket is needed so that packages which you prebuild on a Heroku dyno will be available during the next compilation of your app. As it is currently not possible to write to the Heroku cache from a dyno, some form of external storage must be used.</p>
+<p>Additionally, sharing the same bucket between multiple apps helps save work by allowing common packages to be reused.</p>
+<p>There are three modes of operation:</p>
+<ol type="1">
+<li>S3 is not used.</li>
+<li>S3 is only used for downloads.</li>
+<li>S3 is used both for downloads and uploads.</li>
+</ol>
+<p><em>Mode 1:</em> If the bucket is not available, Haskell on Heroku cannot prebuild new packages for you, and falls back to using <a href="http://halcyon.sh/docs/public-prebuilt-packages/">public prebuilt packages</a>. These packages may not contain all dependencies required to compile your app, in which case your deployment will fail.</p>
+<p><em>Mode 2:</em> Similarly, if the bucket is defined, but uploading to it is not allowed—either by an S3 policy, or by setting <code>HALCYON_NO_UPLOAD</code> to <code>1</code>—Haskell on Heroku only uses the packages which already exist in the bucket. Public packages are not used in this case.</p>
+<p><em>Mode 3:</em> With full access to the bucket, Haskell on Heroku will archive any prebuilt packages in the bucket for later reuse. This is the optimal scenario.</p>
+<p>Access to the bucket is controlled by defining the <code>HALCYON_AWS_ACCESS_KEY_ID</code> and <code>HALCYON_AWS_SECRET_ACCESS_KEY</code> configuration variables.</p>
+</section>
 </section>
 </div>
 </main>
