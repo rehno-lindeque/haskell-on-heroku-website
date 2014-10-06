@@ -14,11 +14,11 @@
 
 </head>
 <body>
-<header id="header">
+<header id="top">
 <div class="wrapper">
 <nav id="header-menu-bar" class="menu-bar">
 <h1 class="logotype"><a href="." title="Haskell on Heroku">Haskell on Heroku</a></h1>
-<span id="header-button-wrapper" class="button-wrapper"><span id="header-button" class="menu-button"><a href="" title="Menu">Menu</a></span></span>
+<span id="header-button" class="menu-button"><a href="" title="Menu">Menu</a></span>
 <ul id="header-menu" class="menu">
 <li><a href="about/">About</a></li> <li><a href="docs/">Docs</a></li> <li><a href="support/">Support</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
 </ul>
@@ -35,32 +35,35 @@ if (localStorage['header-menu-open']) {
 </div>
 </header>
 
-<main id="main">
+<main id="more">
 <div class="wrapper">
 <section id="docs" class="level1">
 <h1>Docs</h1>
 <p>Work in progress.</p>
+<ul>
+<li><a href="docs/reference/">Reference</a></li>
+</ul>
 <section id="on-buckets" class="level2">
 <h2>On buckets</h2>
-<p>Haskell on Heroku is intended to be used with a private Amazon S3 bucket, defined by the <code>HALCYON_S3_BUCKET</code> configuration variable.</p>
-<p>The bucket is needed so that packages prebuilt on a Heroku dyno will be available during app compilation. As it is currently not possible to write to the Heroku cache from a dyno, some form of external storage must be used.</p>
+<p>Haskell on Heroku is intended to be used with a private Amazon S3 bucket, defined by the <a href="docs/reference/#haskell_s3_bucket"><code>HASKELL_S3_BUCKET</code></a> configuration variable.</p>
+<p>Packages prebuilt on a Heroku one-off dyno need to be available during app compilation, which is performed on an unspecified compile dyno. Compile dynos have exclusive access to the Heroku compile cache. As it is not possible to write to the compile cache from an one-dyno, some form of external storage must be used to help transfer the packages, which is where the bucket comes in.</p>
 <p>Additionally, sharing the same bucket between multiple apps helps save work by allowing common packages to be reused.</p>
 <p>There are three modes of operation:</p>
 <ol type="1">
-<li><p>If the bucket is not available, Haskell on Heroku cannot prebuild new packages, and falls back to using <a href="http://halcyon.sh/docs/public-prebuilt-packages/">public prebuilt packages</a>. These packages may not contain all required dependencies, in which case deployment will fail.</p></li>
-<li><p>Similarly, if the bucket is defined, but uploading to it is not allowed—either by an S3 policy, or by setting <code>HALCYON_NO_UPLOAD</code> to <code>1</code>—Haskell on Heroku only uses the packages which already exist in the bucket. Public packages are not used in this case.</p></li>
-<li><p>With full access to the bucket, Haskell on Heroku will archive any prebuilt packages in the bucket for later reuse. This is the optimal scenario.</p></li>
+<li><p>If the bucket is not available, Haskell on Heroku will be unable to prebuild packages, and will only use <a href="http://halcyon.sh/docs/public-prebuilt-packages/">public prebuilt packages</a>. As these packages cannot contain all dependencies required to compile every app, only some apps will deploy successfully in this mode.</p></li>
+<li><p>Similarly, if the bucket is available, but uploading to it is not allowed—either by an S3 policy, or by setting <a href="docs/reference/#haskell_no_upload"><code>HASKELL_NO_UPLOAD</code></a> to <code>1</code>—Haskell on Heroku will only use the packages which already exist in the bucket.</p></li>
+<li><p>Finally, if the bucket is available, and uploading to it is allowed, Haskell on Heroku will archive any prebuilt packages in the bucket for later reuse. This is the optimal mode.</p></li>
 </ol>
-<p>Access to the bucket is controlled by defining the <code>HALCYON_AWS_ACCESS_KEY_ID</code> and <code>HALCYON_AWS_SECRET_ACCESS_KEY</code> configuration variables.</p>
+<p>Access to the bucket is controlled by setting the <a href="docs/reference/#haskell_aws_access_key"><code>HASKELL_AWS_ACCESS_KEY_ID</code></a> and <a href="docs/reference/#haskell_aws_secret_access_key"><code>HASKELL_AWS_SECRET_ACCESS_KEY</code></a> configuration variables.</p>
 </section>
 </section>
 </div>
 </main>
-<footer id="footer">
+<footer id="bottom">
 <div class="wrapper">
 <nav id="footer-menu-bar" class="menu-bar">
 <h1 class="logotype"><a href="." title="Haskell on Heroku">Haskell on Heroku</a></h1>
-<span id="footer-button-wrapper" class="button-wrapper"><span id="footer-button" class="button"><a href="" class="click-to-top" title="Top">Top</a></span></span>
+<span id="footer-button"><a href="#top" title="Top">Top</a></span>
 <ul id="footer-menu" class="menu open">
 <li><a href="about/">About</a></li> <li><a href="docs/">Docs</a></li> <li><a href="support/">Support</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
 </ul>
