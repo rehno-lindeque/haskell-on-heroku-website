@@ -41,21 +41,12 @@ if (localStorage['header-menu-open']) {
 <h1>Docs</h1>
 <p>Work in progress.</p>
 <ul>
+<li><a href="docs/manual/">Manual</a></li>
 <li><a href="docs/reference/">Reference</a></li>
+<li><a href="http://halcyon.sh/docs/manual/">Halcyon manual</a></li>
+<li><a href="http://halcyon.sh/docs/reference/">Halcyon reference</a></li>
+<li><a href="http://halcyon.sh/docs/library-reference/">Halcyon library reference</a></li>
 </ul>
-<section id="on-buckets" class="level2">
-<h2>On buckets</h2>
-<p>Haskell on Heroku is intended to be used with a private Amazon S3 bucket, defined by the <a href="docs/reference/#haskell_s3_bucket"><code>HASKELL_S3_BUCKET</code></a> configuration variable.</p>
-<p>Packages prebuilt on a Heroku one-off dyno need to be available during app compilation, which is performed on an unspecified compile dyno. Compile dynos have exclusive access to the Heroku compile cache. As it is not possible to write to the compile cache from an one-dyno, some form of external storage must be used to help transfer the packages, which is where the bucket comes in.</p>
-<p>Additionally, sharing the same bucket between multiple apps helps save work by allowing common packages to be reused.</p>
-<p>There are three modes of operation:</p>
-<ol type="1">
-<li><p>If the bucket is not available, Haskell on Heroku will be unable to prebuild packages, and will only use <a href="http://halcyon.sh/docs/public-prebuilt-packages/">public prebuilt packages</a>. As these packages cannot contain all dependencies required to compile every app, only some apps will deploy successfully in this mode.</p></li>
-<li><p>Similarly, if the bucket is available, but uploading to it is not allowed—either by an S3 policy, or by setting <a href="docs/reference/#haskell_no_upload"><code>HASKELL_NO_UPLOAD</code></a> to <code>1</code>—Haskell on Heroku will only use the packages which already exist in the bucket.</p></li>
-<li><p>Finally, if the bucket is available, and uploading to it is allowed, Haskell on Heroku will archive any prebuilt packages in the bucket for later reuse. This is the optimal mode.</p></li>
-</ol>
-<p>Access to the bucket is controlled by setting the <a href="docs/reference/#haskell_aws_access_key"><code>HASKELL_AWS_ACCESS_KEY_ID</code></a> and <a href="docs/reference/#haskell_aws_secret_access_key"><code>HASKELL_AWS_SECRET_ACCESS_KEY</code></a> configuration variables.</p>
-</section>
 </section>
 </div>
 </main>
