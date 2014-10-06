@@ -39,7 +39,8 @@ if (localStorage['header-menu-open']) {
 <div class="wrapper">
 <section id="reference" class="level1">
 <h1>Reference</h1>
-<p>Documentation for <a href="https://github.com/mietek/haskell-on-heroku/">Haskell on Heroku</a> internal functions.</p>
+<p>Haskell on Heroku internal function documentation.</p>
+<p>Intended for people interested in developing <a href="https://github.com/mietek/haskell-on-heroku/">Haskell on Heroku</a>. Best read together with the source code.</p>
 <p>Work in progress.</p>
 <blockquote>
 <p>Contents:</p>
@@ -51,102 +52,106 @@ if (localStorage['header-menu-open']) {
 <blockquote>
 <p>Default value: <em>none</em></p>
 </blockquote>
+<p>Part of the authentication details used to access the private Amazon S3 bucket.</p>
 </section>
 <section id="halcyon_aws_secret_access_key" class="level3">
 <h3><code>HALCYON_AWS_SECRET_ACCESS_KEY</code></h3>
 <blockquote>
 <p>Default value: <em>none</em></p>
 </blockquote>
+<p>Like <a href="#halcyon_aws_access_key_id"><code>HALCYON_AWS_ACCESS_KEY_ID</code></a>, but secret.</p>
 </section>
 <section id="halcyon_s3_bucket" class="level3">
 <h3><code>HALCYON_S3_BUCKET</code></h3>
 <blockquote>
 <p>Default value: <em>none</em></p>
 </blockquote>
+<p>Name of the private Amazon S3 bucket used to keep prebuilt packages.</p>
 </section>
 <section id="halcyon_s3_acl" class="level3">
 <h3><code>HALCYON_S3_ACL</code></h3>
 <blockquote>
 <p>Default value: <code>private</code></p>
 </blockquote>
+<p>ACL assigned to all files uploaded to the private Amazon S3 bucket.</p>
+<p>Commonly used values are <code>private</code> and <code>public-read</code>.</p>
 </section>
 <section id="halcyon_purge_cache" class="level3">
 <h3><code>HALCYON_PURGE_CACHE</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
-</section>
-<section id="halcyon_no_archive" class="level3">
-<h3><code>HALCYON_NO_ARCHIVE</code></h3>
-<blockquote>
-<p>Default value: <code>0</code></p>
-</blockquote>
-</section>
-<section id="halcyon_no_upload" class="level3">
-<h3><code>HALCYON_NO_UPLOAD</code></h3>
-<blockquote>
-<p>Default value: <code>0</code></p>
-</blockquote>
+<p>Whether to delete the contents of the Heroku cache before compilation.</p>
 </section>
 <section id="halcyon_no_prebuilt" class="level3">
 <h3><code>HALCYON_NO_PREBUILT</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Whether to ignore all existing prebuilt packages and build all required packages from scratch.</p>
 </section>
 <section id="halcyon_no_prebuilt_ghc" class="level3">
 <h3><code>HALCYON_NO_PREBUILT_GHC</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Like <a href="#halcyon_no_prebuilt"><code>HALCYON_NO_PREBUILT</code></a>, but ignoring only GHC packages.</p>
 </section>
 <section id="halcyon_no_prebuilt_cabal" class="level3">
 <h3><code>HALCYON_NO_PREBUILT_CABAL</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Like <a href="#halcyon_no_prebuilt"><code>HALCYON_NO_PREBUILT</code></a>, but ignoring only Cabal packages.</p>
 </section>
 <section id="halcyon_no_prebuilt_sandbox" class="level3">
 <h3><code>HALCYON_NO_PREBUILT_SANDBOX</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Like <a href="#halcyon_no_prebuilt"><code>HALCYON_NO_PREBUILT</code></a>, but ignoring only sandbox packages.</p>
 </section>
 <section id="halcyon_no_prebuilt_app" class="level3">
 <h3><code>HALCYON_NO_PREBUILT_APP</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Like <a href="#halcyon_no_prebuilt"><code>HALCYON_NO_PREBUILT</code></a>, but ignoring only app packages.</p>
 </section>
 <section id="halcyon_force_ghc_version" class="level3">
 <h3><code>HALCYON_FORCE_GHC_VERSION</code></h3>
 <blockquote>
 <p>Default value: <em>none</em></p>
 </blockquote>
+<p>Version of GHC to use, instead of an inferred version.</p>
 </section>
 <section id="halcyon_force_cabal_version" class="level3">
 <h3><code>HALCYON_FORCE_CABAL_VERSION</code></h3>
 <blockquote>
 <p>Default value: <em>none</em></p>
 </blockquote>
+<p>Version of Cabal to use, instead of an inferred version.</p>
 </section>
 <section id="halcyon_force_cabal_update" class="level3">
 <h3><code>HALCYON_FORCE_CABAL_UPDATE</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Whether to ignore any existing prebuilt updated Cabal packages and update Cabal based on a non-updated Cabal package.</p>
 </section>
 <section id="halcyon_trim_ghc" class="level3">
 <h3><code>HALCYON_TRIM_GHC</code></h3>
 <blockquote>
 <p>Default value: <code>0</code></p>
 </blockquote>
+<p>Whether to use an aggressively minimized prebuilt variant of GHC.</p>
 </section>
 <section id="halcyon_custom_script" class="level3">
 <h3><code>HALCYON_CUSTOM_SCRIPT</code></h3>
 <blockquote>
 <p>Default value: <em>none</em></p>
 </blockquote>
+<p>TODO</p>
 </section>
 </section>
 </section>
