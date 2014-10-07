@@ -1,8 +1,8 @@
 <!doctype html>
-<html class="no-transition"lang="en">
+<html class="no-transition add-section-toc"data-max-section-toc-level="1" lang="en">
 <head>
 <meta charset="utf-8">
-<title>Haskell on Heroku — Docs</title>
+<title>Haskell on Heroku — Documentation</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes,minimal-ui">
 <base href="http://haskellonheroku.com/">
 <link rel="canonical" href="http://haskellonheroku.com/documentation/">
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="_stylesheets.css.gz">
 
 <style>
-  header a.link-docs {
+  header a.link-documentation {
     color: #ac5cf0;
   }
 </style>
@@ -41,16 +41,31 @@ if (localStorage['header-menu-open']) {
 
 <main id="more">
 <div class="wrapper">
-<section id="docs" class="level1">
-<h1>Docs</h1>
-<p>Work in progress.</p>
-<ul>
-<li><a href="docs/manual/">Manual</a></li>
-<li><a href="docs/reference/">Reference</a></li>
-<li><a href="http://halcyon.sh/docs/manual/">Halcyon manual</a></li>
-<li><a href="http://halcyon.sh/docs/reference/">Halcyon reference</a></li>
-<li><a href="http://halcyon.sh/docs/library-reference/">Halcyon library reference</a></li>
-</ul>
+<section id="documentation" class="level1">
+<h1>Documentation</h1>
+<p><em>Haskell on Heroku</em> user guide.</p>
+<p>Detailed technical information is available in the <a href="documentation/reference/"><em>Haskell on Heroku</em> reference</a>.</p>
+<p>Work in progress. Please report any problems with the documentation on the <a href="https://github.com/mietek/haskell-on-heroku-website/issues/"><em>haskell-on-heroku-website</em> issue tracker</a>.</p>
+<blockquote>
+<p>Contents:</p>
+</blockquote>
+<section id="buckets" class="level2">
+<h2>Buckets</h2>
+<p><em>Haskell on Heroku</em> is intended to be used with a private Amazon S3 bucket, defined by the <a href="documentation/reference/#halcyon_s3_bucket"><code>HALCYON_S3_BUCKET</code></a> configuration variable.</p>
+<p>Packages prebuilt on a Heroku one-off dyno need to be available during app compilation, which is performed on an unspecified compile dyno. Compile dynos keep prebuilt packages in the Heroku compile cache, but access to the cache is not allowed from one-off dynos. Some form of external storage must be used to help transfer packages from one-off dynos to compile dynos, which is where the bucket comes in.</p>
+<p>Additionally, sharing the same bucket between multiple apps helps save work by allowing common packages to be reused.</p>
+<p>A public S3 bucket is provided in order to facilitate getting started, and as a fallback measure. Using the public bucket for production purposes is not recommended, as the list of available prebuilt packages may change at any time.</p>
+<section id="bucket-usage" class="level3">
+<h3>Bucket usage</h3>
+<p><em>Haskell on Heroku</em> can use buckets in one of three ways:</p>
+<ol type="1">
+<li><p>If a private bucket is not available, <em>Haskell on Heroku</em> will be unable to prebuild packages, and will only use packages from the default public Halcyon bucket. As these packages cannot contain all dependencies required to compile every app, only some apps will deploy successfully, and other apps will fail to deploy.</p></li>
+<li><p>Similarly, if a private bucket is available, but uploading to it is not allowed—either by an S3 policy, or by setting <a href="documentation/reference/#halcyon_no_upload"><code>HALCYON_NO_UPLOAD</code></a> to <code>1</code>—<em>Haskell on Heroku</em> will only use the packages which already exist in the bucket. Public packages are not used in this mode.</p></li>
+<li><p>Finally, if a private bucket is available, and uploading to it is allowed, <em>Haskell on Heroku</em> will archive any prebuilt packages in the bucket for later reuse. All uploaded files will be assigned an ACL, defined by <a href="documentation/reference/#halcyon_s3_acl"><code>HALCYON_S3_ACL</code></a>. This is the optimal mode.</p></li>
+</ol>
+<p>Access to the private bucket is controlled by setting the <a href="documentation/reference/#halcyon_aws_access_key"><code>HALCYON_AWS_ACCESS_KEY_ID</code></a> and <a href="documentation/reference/#halcyon_aws_secret_access_key"><code>HALCYON_AWS_SECRET_ACCESS_KEY</code></a> configuration variables.</p>
+</section>
+</section>
 </section>
 </div>
 </main>
