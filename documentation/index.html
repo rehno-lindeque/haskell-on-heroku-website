@@ -49,22 +49,69 @@ if (localStorage['header-menu-open']) {
 <blockquote>
 <p>Contents:</p>
 </blockquote>
-<section id="buckets" class="level2">
-<h2>Buckets</h2>
-<p><em>Haskell on Heroku</em> is intended to be used with a private Amazon S3 bucket, defined by the <a href="documentation/reference/#halcyon_s3_bucket"><code>HALCYON_S3_BUCKET</code></a> configuration variable.</p>
-<p>Packages prebuilt on a Heroku one-off dyno need to be available during app compilation, which is performed on an unspecified compile dyno. Compile dynos keep prebuilt packages in the Heroku compile cache, but access to the cache is not allowed from one-off dynos. Some form of external storage must be used to help transfer packages from one-off dynos to compile dynos, which is where the bucket comes in.</p>
-<p>Additionally, sharing the same bucket between multiple apps helps save work by allowing common packages to be reused.</p>
-<p>A public S3 bucket is provided in order to facilitate getting started, and as a fallback measure. Using the public bucket for production purposes is not recommended, as the list of available prebuilt packages may change at any time.</p>
-<section id="bucket-usage" class="level3">
-<h3>Bucket usage</h3>
-<p><em>Haskell on Heroku</em> can use buckets in one of three ways:</p>
+<section id="packages" class="level2">
+<h2>Packages</h2>
+<p><em>Haskell on Heroku</em> uses prebuilt packages to speed up deployment.</p>
+<p>Please be mindful of the many meanings of the term <em>package</em>. In this documentation, the term <em>package</em> always means <em>prebuilt package</em>, and refers to one of the four following types of entities:</p>
 <ol type="1">
-<li><p>If a private bucket is not available, <em>Haskell on Heroku</em> will be unable to prebuild packages, and will only use packages from the default public Halcyon bucket. As these packages cannot contain all dependencies required to compile every app, only some apps will deploy successfully, and other apps will fail to deploy.</p></li>
-<li><p>Similarly, if a private bucket is available, but uploading to it is not allowed—either by an S3 policy, or by setting <a href="documentation/reference/#halcyon_no_upload"><code>HALCYON_NO_UPLOAD</code></a> to <code>1</code>—<em>Haskell on Heroku</em> will only use the packages which already exist in the bucket. Public packages are not used in this mode.</p></li>
-<li><p>Finally, if a private bucket is available, and uploading to it is allowed, <em>Haskell on Heroku</em> will archive any prebuilt packages in the bucket for later reuse. All uploaded files will be assigned an ACL, defined by <a href="documentation/reference/#halcyon_s3_acl"><code>HALCYON_S3_ACL</code></a>. This is the optimal mode.</p></li>
+<li><p><em>GHC packages</em>, which contain a live installation of GHC, including the default global GHC database. The user GHC database is always empty.</p></li>
+<li><p><em>Cabal packages</em>, in two flavours:</p>
+<ul>
+<li><p><em>Non-updated Cabal packages</em>, containing only the <code>cabal-install</code> executable and configuration file.</p></li>
+<li><p><em>Updated Cabal packages</em>, containing also an updated Cabal database.</p></li>
+</ul></li>
+<li><p><em>Sandbox packages</em>, which contain a live sandbox, including all dependencies required to compile a specific app.</p></li>
+<li><p><em>App packages</em>, which contain a live app, including all intermediate files in its <code>dist</code> directory.</p></li>
 </ol>
-<p>Access to the private bucket is controlled by setting the <a href="documentation/reference/#halcyon_aws_access_key"><code>HALCYON_AWS_ACCESS_KEY_ID</code></a> and <a href="documentation/reference/#halcyon_aws_secret_access_key"><code>HALCYON_AWS_SECRET_ACCESS_KEY</code></a> configuration variables.</p>
+<p>All packages include a <code>tag</code> file in their top-level directory, declaring the contents of the package.</p>
+<section id="naming" class="level3">
+<h3>Naming</h3>
+<p>All packages are archived following a consistent naming scheme:</p>
+<ol type="1">
+<li><p>GHC packages:<br /><code>halcyon-ghc-</code><em><code>version</code></em><code>.tar.xz</code></p></li>
+<li><p>Cabal packages:</p>
+<ul>
+<li><p>Non-updated Cabal packages:<br /><code>halcyon-cabal-</code><em><code>version</code></em><code>.tar.xz</code></p></li>
+<li><p>Updated Cabal packages:<br /><code>halcyon-cabal-</code><em><code>version</code></em><code>-</code><em><code>timestamp</code></em><code>.tar.xz</code></p></li>
+</ul></li>
+<li><p>Sandbox packages:<br /><code>halcyon-sandbox-</code><em><code>ghc_version</code></em><code>-</code><em><code>app_name</code></em><code>-</code><em><code>app_version</code></em><code>-</code><em><code>digest</code></em><code>.tar.gz</code></p>
+<p>Sandbox configuration files are also stored separately:<br /><code>halcyon-sandbox-</code><em><code>ghc_version</code></em><code>-</code><em><code>app_name</code></em><code>-</code><em><code>app_version</code></em><code>-</code><em><code>digest</code></em><code>.cabal.config</code></p></li>
+<li><p>App packages:<br /><code>halcyon-app-</code><em><code>ghc_version</code></em><code>-</code><em><code>app-name</code></em><code>-</code><em><code>app_version</code></em><code>.tar.gz</code></p></li>
+</ol>
 </section>
+<section id="rationale" class="level3">
+<h3>Rationale</h3>
+<p>Separating the dependencies required to compile any app into four types is an attempt at striking a balance between the time spent compiling and the space occupied by compilation products. This design allows for mixing-and-matching GHC and Cabal versions, updating the Cabal database incrementally or from scratch, and extending sandboxes based on existing sandboxes.</p>
+<p>Each type of package is expected to vary at a different rate—from never-changing GHC packages, to app packages which change on every deployment.</p>
+</section>
+</section>
+<section id="s3-buckets" class="level2">
+<h2>S3 buckets</h2>
+<p><em>Haskell on Heroku</em> is intended to be used with a private Amazon S3 bucket, defined by the <a href="documentation/reference/#halcyon_s3_bucket"><code>HALCYON_S3_BUCKET</code></a> configuration variable.</p>
+<p>All packages required to compile an app are downloaded from the bucket. If any required packages are not found, compilation will not succeed, and an app-less slug will be deployed. This allows prebuilding packages on an one-off dyno.</p>
+<p>Any prebuilt packages are archived and uploaded to the bucket. All uploaded files are assigned an <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">S3 ACL</a>, defined by <a href="documentation/reference/#halcyon_s3_acl"><code>HALCYON_S3_ACL</code></a>, which defaults to <code>private</code>.</p>
+<p>Access to the bucket is controlled by setting <a href="documentation/reference/#halcyon_aws_access_key"><code>HALCYON_AWS_ACCESS_KEY_ID</code></a> and <a href="documentation/reference/#halcyon_aws_secret_access_key"><code>HALCYON_AWS_SECRET_ACCESS_KEY</code></a>.</p>
+<section id="public-packages" class="level3">
+<h3>Public packages</h3>
+<p>For the purposes of getting started quickly, it is also possible to use <a href="http://s3.halcyon.sh/">public packages</a>, by not defining a private bucket. This is not recommended for production usage, as the set of available public packages may change at any time.</p>
+<p>Additionally, as public packages cannot satisfy all dependencies required to compile every app, some apps will not compile successfully unless a private bucket is defined.</p>
+<p>If a private bucket is defined, public packages are never used. This helps maintain complete control over the deployed code.</p>
+</section>
+<section id="rationale-1" class="level3">
+<h3>Rationale</h3>
+<p>A private bucket is necessary because of the separation between the dynos used for compiling apps and the one-off dynos used for prebuilding packages.</p>
+<p>Compile dynos keep packages in the Heroku compile cache, but prebuild dynos are not allowed to access the cache. Some form of external storage must be used to transfer the packages between dynos, and an Amazon S3 bucket is a good solution to this problem.</p>
+<p>While <em>Haskell on Heroku</em> is designed to make prebuilding packages on one-off dynos as easy as possible, packages can also be prebuilt on any machine with a compatible architecture and OS. Please refer to the <a href="http://halcyon.sh/documentation/"><em>Halcyon</em> documentation</a> for details.</p>
+<p>Storing packages externally also allows unrelated apps to share common dependencies. Sharing the same private bucket between multiple apps requires no additional configuration beyond defining the same bucket for every app. This is how public packages are made available.</p>
+</section>
+</section>
+<section id="caching" class="level2">
+<h2>Caching</h2>
+<p><em>Haskell on Heroku</em> downloads all files to the Heroku compile cache, which is automatically cleaned after every installation, retaining only the most recently used packages.</p>
+<p>Deleting the contents of the cache before installation can be requested by setting the <a href="documentation/reference/#halcyon_purge_cache"><code>HALCYON_PURGE_CACHE</code></a> configuration variable to <code>1</code>. This is equivalent to using the <a href="https://github.com/heroku/heroku-repo#purge_cache"><code>purge_cache</code></a> command from the <a href="https://github.com/heroku/heroku-repo/"><code>heroku-repo</code></a> plugin, but more efficient.</p>
+<p>Remember to unset the variable before redeploying.</p>
+<hr />
+<p><em>To be continued.</em></p>
 </section>
 </section>
 </div>
