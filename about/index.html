@@ -11,7 +11,11 @@
 <link rel="icon" type="image/png" href="_images/favicon-32.png" sizes="32x32">
 <link rel="stylesheet" href="_stylesheets.css.gz">
 
-
+<style>
+  header a.link-about {
+    color: #ac5cf0;
+  }
+</style>
 </head>
 <body>
 <header id="top">
@@ -20,7 +24,7 @@
 <h1 class="logotype"><a href="." title="Haskell on Heroku">Haskell on Heroku</a></h1>
 <span id="header-button" class="menu-button"><a href="" title="Menu">Menu</a></span>
 <ul id="header-menu" class="menu">
-<li><a href="about/">About</a></li> <li><a href="docs/">Docs</a></li> <li><a href="support/">Support</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
+<li><a class="link-about" href="about/">About</a></li> <li><a class="link-documentation" href="documentation/">Documentation</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
 </ul>
 <script>
 if (localStorage['header-menu-open']) {
@@ -39,8 +43,27 @@ if (localStorage['header-menu-open']) {
 <div class="wrapper">
 <section id="about" class="level1">
 <h1>About</h1>
-<p>Background image based on <a href="https://www.flickr.com/photos/kubina/152730867/">Cumulus Clouds</a> by <a href="https://www.flickr.com/photos/kubina/">Jeff Kubina</a>, published under the <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0 License</a>.</p>
-<p>Website built with <a href="https://github.com/mietek/cannot/"><em>cannot</em></a>.</p>
+<p><em>Haskell on Heroku</em> is made by <a href="http://mietek.io/">Miëtek Bak</a>.</p>
+<p>Interested in deploying Haskell on other platforms? Try <a href="http://halcyon.sh/">Halcyon</a>.</p>
+<section id="support" class="level2">
+<h2>Support</h2>
+<p>Please report any problems on the <a href="https://github.com/mietek/haskell-on-heroku/issues/">Haskell on Heroku issue tracker</a>.</p>
+<p>Commercial support for <em>Haskell on Heroku</em> is offered by <a href="http://leastfixed.com/">Least Fixed</a>, a software consultancy based in Cambridge, UK.</p>
+<p>Need help deploying a Haskell web app? Say <a href="" id="hello">hello</a>.</p>
+</section>
+<section id="acknowledgments" class="level2">
+<h2>Ac­knowl­edg­ments</h2>
+<p>Thanks to <a href="http://begriffs.com/">Joe Nelson</a> and <a href="https://github.com/luciferous/">Neuman Vong</a> for their work on Haskell buildpacks.</p>
+<p>Thanks to <a href="http://www.tweag.io/">Tweag I/O</a> and <a href="http://purelyagile.com/">Purely Agile</a> for their advice and assistance.</p>
+<p>The sans-serif font used in this website is <a href="http://practicaltypography.com/concourse.html">Concourse</a>, by <a href="http://practicaltypography.com/">Matthew Butterick</a>. The monospaced font is <a href="http://www.fsd.it/fonts/pragmatapro.htm">PragmataPro</a>, by <a href="http://www.fsd.it/">Fabrizio Schiavi</a>.</p>
+<p>The welcome image is based on <a href="https://www.flickr.com/photos/kubina/152730867/">Cumulus Clouds</a> by <a href="https://www.flickr.com/photos/kubina/">Jeff Kubina</a>, published under the <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0 License</a>.</p>
+<p>The website is built with <a href="https://github.com/mietek/cannot/"><em>cannot</em></a>, a microframework by <a href="http://mietek.io/">Miëtek Bak</a>.</p>
+</section>
+<section id="legal" class="level2">
+<h2>Legal</h2>
+<p>© 2014 Miëtek Bak. Published under the <a href="license/">MIT X11 License</a>.</p>
+<p>Not affiliated with or supported by <a href="http://heroku.com/">Heroku</a> or <a href="http://salesforce.com/">Salesforce</a>.</p>
+</section>
 </section>
 </div>
 </main>
@@ -50,11 +73,15 @@ if (localStorage['header-menu-open']) {
 <h1 class="logotype"><a href="." title="Haskell on Heroku">Haskell on Heroku</a></h1>
 <span id="footer-button"><a href="#top" title="Top">Top</a></span>
 <ul id="footer-menu" class="menu open">
-<li><a href="about/">About</a></li> <li><a href="docs/">Docs</a></li> <li><a href="support/">Support</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
+<li><a class="link-about" href="about/">About</a></li> <li><a class="link-documentation" href="documentation/">Documentation</a></li> <li><a href="https://github.com/mietek/haskell-on-heroku/">GitHub</a></li>
 </ul>
 </nav>
-<aside> <p> Made by <a href="http://mietek.io/">Miëtek Bak</a>. Supported by <a href="http://leastfixed.com/">Least Fixed</a>. Published under the <a href="license/">MIT X11 License</a>. </p> </aside>
-
+<aside> <p> Made by <a href="http://mietek.io/">Miëtek Bak</a>. Supported by <a href="http://leastfixed.com/">Least Fixed</a>. Published under the <a href="license/">MIT X11 License</a>. Not affiliated with <a href="http://heroku.com/">Heroku</a>. </p> </aside>
+<script>
+  addEventListener('load', function () {
+    document.getElementById('hello').href = cannot.rot13('znvygb:uryyb@yrnfgsvkrq.pbz');
+  });
+</script>
 </div>
 </footer>
 <!--[if lte IE 9]>
