@@ -71,13 +71,13 @@ if (localStorage['header-menu-open']) {
 </section>
 <section id="sandbox-packages" class="level3">
 <h3>Sandbox packages</h3>
-<p>Special consideration is due to sandbox packages. Every sandbox package includes a <code>cabal.config</code> file, which declares the names and version numbers of all included dependencies. A SHA–1 digest of these constraints is embedded in the name of the package. This allows efficiently locating a sandbox which perfectly matches all required dependencies—by scanning a list of file names.</p>
+<p>Special consideration is due to sandbox packages. Every sandbox package includes a <code>cabal.config</code> file, which declares a set of constraints—the names and version numbers of all included dependencies. A <a href="http://en.wikipedia.org/wiki/SHA-1">SHA–1</a> digest of these constraints is embedded in the name of the package. This allows efficiently locating a sandbox which perfectly matches all required dependencies—by scanning a list of file names.</p>
 <p>A copy of the <code>cabal.config</code> file is also kept next to the archived sandbox package:<br /><code>halcyon-sandbox-</code><em><code>ghcVersion</code></em><code>-</code><em><code>appName</code></em><code>-</code><em><code>appVersion</code></em>-<em><code>sandboxDigest</code></em><code>.cabal.config</code></p>
-<p>If a perfect match for the required dependencies cannot be located, each available configuration file is scanned and scored. Files including any extraneous constraints are ignored. The sandbox containing the best scoring set of constraints is selected a base for building a new, perfectly matched sandbox.</p>
+<p>If a perfectly matched sandbox cannot be located, each available configuration file is scanned and scored. Files including any extraneous constraints are ignored. The sandbox containing the best scoring set of constraints is selected as a base, copied, and extended with the missing packages. The resulting sandbox will match the required dependencies perfectly, without needing to be built from scratch.</p>
 </section>
 <section id="rationale" class="level3">
 <h3>Rationale</h3>
-<p>Separating the dependencies required to compile an app into four tiers is an attempt at striking an optimum between the time spent compiling code, archiving compilation results, and transferring archives over the network.</p>
+<p>Separating the dependencies required to compile an app into four tiers is an attempt at striking a balance between the time spent compiling code, archiving compilation results, and transferring archives over the network.</p>
 <p>The four-tiered design allows mixing-and-matching GHC and Cabal versions, updating the Cabal database incrementally or from scratch, and building new sandboxes based on existing sandboxes. This flexibility enables aiming for efficiency at every step—for example:</p>
 <ul>
 <li><p>The sandbox scoring process accepts only sandboxes which include a strict subset of the required dependencies. This ensures every sandbox built contains the minimum necessary amount of data.</p></li>
@@ -88,8 +88,8 @@ if (localStorage['header-menu-open']) {
 <section id="building-packages" class="level2">
 <h2>Building packages</h2>
 <p><em>Haskell on Heroku</em> is intended to be used with a private Amazon S3 bucket, defined by the <a href="documentation/reference/#halcyon_s3_bucket"><code>HALCYON_S3_BUCKET</code></a> configuration variable.</p>
-<p>All packages required for compilation are downloaded from the bucket. If a required package is not found while attempting to deploy an app, compilation will fail—but deployment will succeed! This may be counter-intuitive, but it enables building the missing packages directly on Heroku, without needing to involve any external entities.</p>
-<p>Should compilation fail due to a missing package, the user will be notified, and the deployed slug will consist only <em>Haskell on Heroku</em> itself. The next step is building the missing packages on a one-off PX-sized dyno:</p>
+<p>All packages required for compilation are downloaded from the bucket. If a required package is not found while attempting to deploy an app, compilation will fail—but deployment will succeed! The deployed slug will contain only <em>Haskell on Heroku</em> itself. This approach, which may seem counter-intuitive, enables building the missing packages directly on Heroku, without the need to involve any external entities.</p>
+<p>The user will be notified whenever compilation fails due to a missing package. The next step is building the missing packages on a one-off PX-sized dyno:</p>
 <pre><code>$ heroku run --size=PX build</code></pre>
 <p>The newly built packages will perfectly match all required dependencies, allowing subsequent compilation to succeed. Pushing an empty commit is the simplest way to deploy again:</p>
 <pre><code>$ git commit --allow-empty --allow-empty-message -m &#39;&#39;
